@@ -13,6 +13,9 @@ from collections import defaultdict
 def GetPlayerNames():
     return ["Annie","*Ben","*Carla"]
 
+def GetNoPlayers():
+    return []
+
 def GetNumVictoryCards(player_names):
     if len(player_names)>2:
         return 12
@@ -86,6 +89,16 @@ def updateSupplyWithoutTreasure(supply, player_names, nV, nC):
     supply["Estate"]=[Dominion.Estate()]*nV
     supply["Duchy"]=[Dominion.Duchy()]*nV
     supply["Province"]=[Dominion.Province()]*nV
+    supply["Curse"]=[Dominion.Curse()]*nC
+
+#The supply without the victory cards being put in
+def updateSupplyWithoutVictoryCards(supply, player_names, nV, nC):
+    supply["Copper"]=[Dominion.Copper()]*(60-len(player_names)*7)
+    supply["Silver"]=[Dominion.Silver()]*40
+    supply["Gold"]=[Dominion.Gold()]*30
+    supply["Estate"]=[]
+    supply["Duchy"]=[]
+    supply["Province"]=[]
     supply["Curse"]=[Dominion.Curse()]*nC
 
 #Costruct the Player objects

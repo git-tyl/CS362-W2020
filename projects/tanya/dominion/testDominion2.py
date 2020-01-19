@@ -3,6 +3,8 @@
 Created on Sun Jan 19 15:42:42 2020
 
 @author: tanya
+
+This file test if the supply has no victory cards that are initialized
 """
 
 import Dominion
@@ -22,7 +24,7 @@ supply_order = testUtility.GetSupplyOrder()
 #Pick 10 cards from box to be in the supply.
 supply = testUtility.pick10CardsToBeInSupply(box)
 #get all the treasure, victory and curse cards added to the supply
-testUtility.updateSupply(supply, player_names, nV,nC)
+testUtility.updateSupplyWithoutVictoryCards(supply, player_names, nV,nC)
 #Costruct the Player objects
 players = testUtility.ConstructPlayers(player_names)
 #Start the game
