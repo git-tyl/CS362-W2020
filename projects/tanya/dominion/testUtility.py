@@ -28,6 +28,9 @@ def pick10CardsToBeInSupply(box):
     random10 = boxlist[:10]
     return defaultdict(list,[(k,box[k]) for k in random10])
 
+def GetEmptyBox(nV):
+    return {}
+
 #Define box
 def GetBoxes(nV):
     box = {}
@@ -70,6 +73,16 @@ def updateSupply(supply, player_names, nV, nC):
     supply["Copper"]=[Dominion.Copper()]*(60-len(player_names)*7)
     supply["Silver"]=[Dominion.Silver()]*40
     supply["Gold"]=[Dominion.Gold()]*30
+    supply["Estate"]=[Dominion.Estate()]*nV
+    supply["Duchy"]=[Dominion.Duchy()]*nV
+    supply["Province"]=[Dominion.Province()]*nV
+    supply["Curse"]=[Dominion.Curse()]*nC
+
+#The supply without the tresure being put in
+def updateSupplyWithoutTreasure(supply, player_names, nV, nC):
+    supply["Copper"]=[]
+    supply["Silver"]=[]
+    supply["Gold"]=[]
     supply["Estate"]=[Dominion.Estate()]*nV
     supply["Duchy"]=[Dominion.Duchy()]*nV
     supply["Province"]=[Dominion.Province()]*nV
