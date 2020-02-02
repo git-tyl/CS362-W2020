@@ -36,3 +36,11 @@ class TestCard(TestCase):
     def test_react(self):
         pass
 
+    def TestPlayer(TestCase):
+        def test_stack(self):
+            player = Dominion.Player('Annie')
+            self.assertEqual(10,len(player.stack()))
+            #change the deck and check the stack to verify it increased
+            player.deck = [Dominion.Copper()] * 10 + [Dominion.Estate()] * 3
+            self.assertEqual(18, len(player.stack()))
+
