@@ -147,7 +147,7 @@ class TestAction_Card(TestCase):
         # checks if coins is initialized properly
         self.assertEqual(4, self.actionCard.coins)
         # checks if the player's hand is equal to 2
-        self.assertEqual(2, self.player.hand)
+        self.assertEqual(2, len(self.player.hand))
 
 
 class TestPlayer(TestCase):
@@ -294,17 +294,183 @@ class TestPlayer(TestCase):
 
     def test_draw(self):
         self.setUp()
-        # test scenario where none of the draw function if statments are executed
+
         self.player.discard = []
+        # test scenario where only deck >0 0 in the draw function if statments is executed
+        self.assertNotEqual(0, len(self.player.deck))
+        # check if 5 cards are present in the deck
+        self.assertEqual(5, len(self.player.deck))
+        # check if player's hand already constains 5 cards
+        self.assertEqual(5, len(self.player.hand))
         self.player.draw(self.player.discard)
 
+        # check if 1 card was removed from the deck
+        self.assertEqual(4, len(self.player.deck))
+        # check if 1 card was added to the discard pile
+        self.assertEqual(1, len(self.player.discard))
 
+        # check the branch where the dest == NONE
+        self.player.draw()
 
+        # check if 1 card was removed from the deck
+        self.assertEqual(3, len(self.player.deck))
+        # check if 1 card was added to the player's hand pile
+        self.assertEqual(6, len(self.player.hand))
+
+        # test scenario where only deck == 0 in the draw function if statments is executed
+
+        #setup the player again
+        self.setUp()
+
+        estateCard = Dominion.Estate()
+        duchyCard = Dominion.Duchy()
+        # add only 2 cards to the discard pile
+        self.player.discard = [estateCard, duchyCard]
+        #empty the deck
+        self.player.deck = []
+
+        drawnCard = self.player.draw()
+
+        # check if player's discard pile is empty
+        self.assertEqual(0, len(self.player.discard))
+
+        # check if player's deck has increased by 1
+        self.assertEqual(1, len(self.player.deck))
+
+        if drawnCard == estateCard:
+            self.assertEqual(estateCard, drawnCard)
+        elif drawnCard == duchyCard:
+            self.assertEqual(duchyCard, drawnCard)
+        else: #case where card drawn is none of the 2
+            self.fail()
 
     def test_cardsummary(self):
-        # self.fail()
-        pass
 
+        #create the player
+        self.setUp()
+        # clear the deck
+        self.player.deck = []
+        # clear the hand
+        self.player.hand = []
+        summary = self.player.cardsummary()
 
+        # check case when there is a no card
+        self.assertEqual(0, summary["VICTORY POINTS"])
 
+        # check case when there is only 1 copper card in the stack
+        #add one copper card to the hand
+        self.player.hand = [Dominion.Copper()]
+        summary = self.player.cardsummary()
+        # no victory card therefore should only have 0 victory points
+        self.assertEqual(0, summary["VICTORY POINTS"])
+        # only 1 copper card so should have only 1 copper card shown in summary
+        self.assertEqual(1, summary["Copper"])
 
+        # check case where you have 2 copper cards and no victory cards
+        self.player.hand.append(Dominion.Copper())
+        summary = self.player.cardsummary()
+        # no victory card therefore should only have 0 victory points
+        self.assertEqual(0, summary["VICTORY POINTS"])
+        # 2 copper card so should show 2 copper card shown in summary
+        self.assertEqual(2, summary["Copper"])
+
+        # check case where you add 1 victory card
+        #add an estate card
+        self.player.hand.append(Dominion.Estate())
+        summary = self.player.cardsummary()
+        # no victory card therefore should only have 1 victory points
+        self.assertEqual(1, summary["VICTORY POINTS"])
+        # 2 copper card so should show 2 copper card shown in summary
+        self.assertEqual(1, summary["Estate"])
+        # 2 copper card so should show 2 copper card shown in summary
+        self.assertEqual(2, summary["Copper"])
+
+        # check case where you add 1 victory card
+        # add a duchy card to see if another type of victory card is checked
+        self.player.hand.append(Dominion.Duchy())
+        summary = self.player.cardsummary()
+        # no victory card therefore should only have 4 victory points
+        self.assertEqual(4, summary["VICTORY POINTS"])
+        # 1 estate card so should show 1 estate card shown in summary
+        self.assertEqual(1, summary["Estate"])
+        # 1 duchy card so should show 1 duchy card shown in summary
+        self.assertEqual(1, summary["Duchy"])
+        # 2 copper card so should show 2 copper card shown in summary
+        self.assertEqual(2, summary["Copper"])
+
+        # check case where you add another of the same card victory card
+        # add a duchy card to see if another type of victory card is checked
+        self.player.hand.append(Dominion.Duchy())
+        summary = self.player.cardsummary()
+        # no victory card therefore should only have 4 victory points
+        self.assertEqual(7, summary["VICTORY POINTS"])
+        # 1 estate card so should show 1 estate card shown in summary
+        self.assertEqual(1, summary["Estate"])
+        # 2 duchy cards so should show 2 duchy cards shown in summary
+        self.assertEqual(2, summary["Duchy"])
+        # 2 copper card so should show 2 copper card shown in summary
+        self.assertEqual(2, summary["Copper"])
+
+class TestGameOver(TestCase):
+
+    # setup the variables needed
+    def setUp(self):
+        # setup empty trash pile
+        self.trash = []
+        # setup players
+        self.players = testUtility.GetPlayerNames()
+        # setup victory cards
+        self.nV = testUtility.GetNumVictoryCards(self.players)
+        # setup curse cards
+        self.nC = testUtility.GetNumCursesCards(self.players)
+        # create the box of cards
+        self.box = testUtility.GetBoxes(self.nV)
+        # get the supply order
+        self.supply_order = testUtility.GetSupplyOrder()
+
+        # Pick n cards from box to be in the supply
+        self.supply = testUtility.pick10CardsToBeInSupply(self.box)
+
+        # update supply with all the victory and curse guards based
+        # on the players
+        testUtility.updateSupply(self.supply, self.players, self.nV, self.nC)
+
+        # make current player annnie
+        self.player = Dominion.Player("Annie")
+
+    def test_gameOver(self):
+
+        #setup supply normal supply at the beginning of the game
+        self.setUp()
+        # check if the game is not over from the supply
+        isGameOver = Dominion.gameover(self.supply)
+        self.assertEqual(False, isGameOver)
+
+        #reduce the province cards to zero
+        self.supply["Province"] = []
+        isGameOver = Dominion.gameover(self.supply)
+        self.assertEqual(True, isGameOver)
+
+        # re setup supply
+        self.setUp()
+        # check if the game is not over from the supply
+        isGameOver = Dominion.gameover(self.supply)
+        self.assertEqual(False, isGameOver)
+
+        #remove the supply of throne room
+        self.supply["Throne Room"] = []
+        # game should not be over from removal of throne room
+        isGameOver = Dominion.gameover(self.supply)
+        self.assertEqual(False, isGameOver)
+
+        # remove the supply of throne room
+        self.supply["Festival"] = []
+        # game should not be over from removal of throne room and festival
+        isGameOver = Dominion.gameover(self.supply)
+        self.assertEqual(False, isGameOver)
+
+        # remove the supply of throne room
+        self.supply["Adventurer"] = []
+        # game should be over from removal of throne room, Adventurer and festival
+        isGameOver = Dominion.gameover(self.supply)
+        self.assertEqual(True, isGameOver)
