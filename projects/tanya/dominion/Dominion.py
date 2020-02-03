@@ -64,7 +64,7 @@ class Action_card(Card):
     def __init__(self,name,cost,actions,cards,buys,coins):
         Card.__init__(self,name,"action",cost,0,0)
         self.actions = actions
-        self.cards = cards
+        self.   cards = cards
         self.buys = buys
         self.coins = coins
     def use(self,player,trash):
