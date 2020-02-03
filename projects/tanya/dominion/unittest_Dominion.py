@@ -3,46 +3,6 @@ import testUtility
 import Dominion
 
 
-
-# class TestCard(TestCase):
-#
-#     def setUp(self):
-#         self.players = testUtility.GetPlayerNames()
-#         self.nV = testUtility.GetNumVictoryCards(self.players)
-#         self.nC = testUtility.GetNumCursesCards(self.players)
-#         self.box = testUtility.GetBoxes(self.nV)
-#         self.supply_order = testUtility.GetSupplyOrder()
-#
-#         # Pick n cards from box to be in the supply
-#         self.supply = testUtility.pick10CardsToBeInSupply(self.box)
-#         testUtility.updateSupply(self.supply, self.players, self.nV, self.nC)
-#         self.player = Dominion.Player("Annie")
-#
-#     #test if initialization is working
-#     def test_init(self):
-#         #initialize_test_data
-#         self.setUp()
-#         cost = 1
-#         buypower = 5
-#
-#         #instantiate the card object
-#         card = Dominion.Coin_card(self.player.name, cost, buypower)
-#
-#         #verify that the class variables have the expected values
-#
-#         self.assertEqual('Annie', card.name)
-#         self.assertEqual(buypower, card.buypower)
-#         self.assertEqual(cost, card.cost)
-#         self.assertEqual("coin", card.category)
-#         self.assertEqual(0, card.vpoints)
-#
-#     def test_use(self):
-#         # self.fail()
-#         pass
-#     def test_augment(self):
-#         # self.fail()
-#         pass
-
 class TestAction_Card(TestCase):
 
     #setup the variables needed
@@ -106,6 +66,8 @@ class TestAction_Card(TestCase):
         self.assertEqual(5, len(self.player.hand))
         # remove one card from the deck
         self.player.hand.pop()
+        # check if card is popped
+        self.assertEqual(4, len(self.player.hand))
         # check if player's hand is zero
         self.player.hand.append(self.actionCard)
         # check if player's hand has increased to 5 cards
@@ -293,6 +255,26 @@ class TestPlayer(TestCase):
         self.assertEqual(19, points)
 
     def test_draw(self):
+
+        # setup the player
+        # this test if none of the branches were hit
+        self.setUp()
+
+        self.player.deck = []
+        self.player.discard = []
+        self.player.hand = []
+
+        #check
+        self.assertEqual(0, len(self.player.deck))
+        self.assertEqual(0, len(self.player.discard))
+        self.assertEqual(0, len(self.player.hand))
+
+        self.player.draw(self.player.hand)
+
+        self.assertEqual(0, len(self.player.deck))
+        self.assertEqual(0, len(self.player.discard))
+        self.assertEqual(0, len(self.player.hand))
+
         self.setUp()
 
         self.player.discard = []
