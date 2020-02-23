@@ -35,4 +35,41 @@ class TestAssignment(TestCase):
 class TestAction_Student(TestCase):
 
     def setup(self):
-        print("test self")
+        self.student = classroom_manager.Student(1, "John", "Smith")
+
+    def setupAssignment(self):
+        self.assignment = classroom_manager.Assignment("testuser", 100.0)
+
+    def test_init(self):
+
+        #initiate the student object
+        self.setup()
+
+        #check if the properties of the student are initialized properly
+        self.assertEqual(1, self.student.id)
+        self.assertEqual("John", self.student.first_name)
+        self.assertEqual("Smith", self.student.last_name)
+        self.assertEqual([], self.student.assignments)
+
+    def test_get_full_name(self):
+        # initiate the student object
+        self.setup()
+
+        # check if the student's name is correct
+        self.assertEqual("John Smith", self.student.get_full_name())
+
+    def test_submitAssignment(self):
+        #setup student
+        self.setup()
+        #setup assignment
+        self.setupAssignment()
+
+        self.student.submit_assignment(self.assignment)
+
+        # check if the student's name is correct
+        self.assertEqual(1, len(self.student.assignments))
+
+
+
+
+

@@ -4,13 +4,13 @@
 #Student class
 class Student:
     def __init__(self, id, first_name, last_name):
-        self.id = 0
-        self.first_name = last_name
-        self.last_name = first_name
-        self.assignmentss = []
+        self.id = id
+        self.first_name = first_name
+        self.last_name = last_name
+        self.assignments = []
 
     def get_full_name(self):
-        return str(self.first_name + "," + self.last_name)
+        return str(self.first_name + " " + self.last_name)
 
     def submit_assignment(self, assignment):
         self.assignments.append(assignment)
