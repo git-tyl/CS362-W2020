@@ -19,14 +19,11 @@ class TestAction_Card(TestCase):
         self.box = testUtility.GetBoxes(self.nV)
         #get the supply order
         self.supply_order = testUtility.GetSupplyOrder()
-
         # Pick n cards from box to be in the supply
         self.supply = testUtility.pick10CardsToBeInSupply(self.box)
-
         #update supply with all the victory and curse guards based
         #on the players
         testUtility.updateSupply(self.supply, self.players, self.nV, self.nC)
-
         #make current player annnie
         self.player = Dominion.Player("Annie")
 
@@ -52,8 +49,11 @@ class TestAction_Card(TestCase):
         self.assertEqual(1, self.actionCard.actions)
         # checks if cards is initialized properly
         self.assertEqual(2, self.actionCard.cards)
+        # check if buys are equal to 5
+        self.assertEqual(5, self.actionCard.buys)
         # checks if coins is initialized properly
         self.assertEqual(4, self.actionCard.coins)
+
 
     # test if use function works for action card
     def test_use(self):
@@ -90,14 +90,35 @@ class TestAction_Card(TestCase):
         self.setUp()
         #setupCard
         self.setupCard()
-        self.player.hand = []
-        self.player.actions = 0
-        self.player.buys = 0
-        self.player.purse = 0
-        # self.player.actions = 0
-        # self.player.turn(self.players, self.supply, self.trash)
-        # self.player.turn(self.players, [], [])
 
+        self.assertEqual("Laboratory", self.actionCard.name)
+        # checks if cost is initialized properly
+        self.assertEqual(5, self.actionCard.cost)
+        # checks if actions is initialized properly
+        self.assertEqual(1, self.actionCard.actions)
+        # checks if cards is initialized properly
+        self.assertEqual(2, self.actionCard.cards)
+        # checks if coins is initialized properly
+        self.assertEqual(4, self.actionCard.coins)
+
+        self.player.hand = []
+        #initialize the player's action to be zero
+        self.player.actions = 0
+        # initialize the player's buys to be zero
+        self.player.buys = 0
+        # initialize the player's purse to be zero
+        self.player.purse = 0
+
+        #check if players hand is empty
+        self.assertEqual(0, len(self.player.hand))
+        # checks if cost is initialized properly
+        self.assertEqual(0, self.player.actions)
+        # checks if actions is initialized properly
+        self.assertEqual(0, self.player.buys)
+        # checks if cards is initialized properly
+        self.assertEqual(0, self.player.purse)
+
+        # call the augment function
         self.actionCard.augment(self.player)
 
         # checks if cost is initialized properly
@@ -114,10 +135,11 @@ class TestAction_Card(TestCase):
 
 class TestPlayer(TestCase):
 
-    #initialize variables
+    # creates a player named 'Annie'
     def setUp(self):
         self.player = Dominion.Player('Annie')
 
+    # creates a laboratory card
     def setupLaboratoryCard(self):
         name = "Laboratory"
         cost = 5
@@ -127,6 +149,7 @@ class TestPlayer(TestCase):
         coins = 4
         return Dominion.Action_card(name, cost, actions, cards, buys, coins)
 
+    # creates a festival card
     def setupFestivalCard(self):
         name = "Festival"
         cost = 5
@@ -136,8 +159,23 @@ class TestPlayer(TestCase):
         coins = 2
         return Dominion.Action_card(name, cost, actions, cards, buys, coins)
 
+    #setups the player deck with the festival card
     def setUpDeckStack(self):
-        self.player.deck.append(self.setupFestivalCard())
+
+        card = self.setupFestivalCard()
+        self.player.deck.append(card)
+        # checks if name is initialized properly
+        self.assertEqual("Festival", card.name)
+        # checks if cost is initialized properly
+        self.assertEqual(5, card.cost)
+        # checks if actions is initialized properly
+        self.assertEqual(2, card.actions)
+        # checks if cards is initialized properly
+        self.assertEqual(0, card.cards)
+        # check if buys are equal to 5
+        self.assertEqual(1, card.buys)
+        # checks if coins is initialized properly
+        self.assertEqual(2, card.coins)
 
     def test_stack(self):
         self.setUp()
@@ -275,9 +313,12 @@ class TestPlayer(TestCase):
         self.assertEqual(0, len(self.player.discard))
         self.assertEqual(0, len(self.player.hand))
 
+        #new setup of user
         self.setUp()
 
         self.player.discard = []
+        #asset empty discard pile
+        self.assertEqual(0, len(self.player.discard))
         # test scenario where only deck >0 0 in the draw function if statments is executed
         self.assertNotEqual(0, len(self.player.deck))
         # check if 5 cards are present in the deck
