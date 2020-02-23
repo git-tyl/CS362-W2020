@@ -10,9 +10,9 @@ class TestAssignment(TestCase):
 
     # test initiator for assignment
     def test_init(self):
-        self.assignment = classroom_manager.Assignment("test", 100.0)
+        self.setup()
         self.assertEqual(100.0, self.assignment.max_score)
-        self.assertEqual("test", self.assignment.name)
+        self.assertEqual("testuser", self.assignment.name)
         self.assertEqual(None, self.assignment.grade)
 
     #test if a grade can be assigned
@@ -20,8 +20,8 @@ class TestAssignment(TestCase):
         self.setup()
 
         #test if a grade can be assigned
-        self.assignment.assign_grade(12.0)
-        self.assertEqual(12.0, self.assignment.grade)
+        self.assignment.assign_grade(100.0)
+        self.assertEqual(100.0, self.assignment.grade)
 
     # test if a grade is assigned over the max you will get none
 
