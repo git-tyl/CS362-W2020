@@ -37,8 +37,8 @@ class Student:
 
     def remove_assignment(self, name):
         for a in self.assignments:
-            if a.name == 'name':
-                del name
+            if a.name == name:
+                self.assignments.remove(a)
 
 #Assignment class
 class Assignment:

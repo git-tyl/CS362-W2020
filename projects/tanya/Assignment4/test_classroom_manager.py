@@ -202,3 +202,35 @@ class TestAction_Student(TestCase):
 
         # get avarege
         self.assertEqual(0, self.student.get_average())
+
+        # test the average function
+    def test_remove_assignments(self):
+        # setup student and assignment
+        # setup student
+        self.setup()
+        # setup assignments
+        self.setupAssignments()
+
+        # get the assignment named testuser1
+        self.assertEqual(self.assignment1, self.student.get_assignment("assignment1"))
+
+        # check if assignment name is correct
+        self.assertEqual("assignment1", self.student.get_assignment("assignment1").name)
+
+        # check if assignment 2 name is correct
+        self.assertEqual("assignment2", self.student.get_assignment("assignment2").name)
+
+        # check if assignment 3 name is correct
+        self.assertEqual("assignment3", self.student.get_assignment("assignment3").name)
+
+        # get the length of the assignments, should be 3 as there are only 3 assignments added
+        self.assertEqual(3, len(self.student.get_assignments()))
+
+        self.student.remove_assignment("assignment1")
+
+        # length of assignments should be 2
+        self.assertEqual(2, len(self.student.get_assignments()))
+
+        for assignment in self.student.get_assignments():
+            self.assertNotEqual("assignment1", assignment.name)
+
