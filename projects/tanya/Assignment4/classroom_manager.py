@@ -20,7 +20,7 @@ class Student:
 
     def get_assignment(self, name):
         for a in self.assignments:
-            if a.name == 'name':
+            if a.name == name:
                 return a
 
     def get_average(self):

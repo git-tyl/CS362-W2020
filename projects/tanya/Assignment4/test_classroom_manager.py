@@ -40,6 +40,21 @@ class TestAction_Student(TestCase):
     def setupAssignment(self):
         self.assignment = classroom_manager.Assignment("testuser", 100.0)
 
+    #setup a list of assignment
+    def setupAssignments(self):
+        # setup student
+        self.setup()
+
+        # setup assignment2
+        self.assignment1 = classroom_manager.Assignment("assignment1", 100.0)
+        self.assignment2 = classroom_manager.Assignment("assignment2", 70.0)
+        self.assignment3 = classroom_manager.Assignment("assignment3", 80.0)
+
+        # add the assignments to student assignments properties
+        self.student.submit_assignment(self.assignment1)
+        self.student.submit_assignment(self.assignment2)
+        self.student.submit_assignment(self.assignment3)
+
     def test_init(self):
 
         #initiate the student object
@@ -74,25 +89,26 @@ class TestAction_Student(TestCase):
 
     def test_get_assignment(self):
 
-        # setup student
-        self.setup()
+        #setup student and assignment
+        self.setupAssignments()
 
-        # setup assignment2
-        assignment1 = classroom_manager.Assignment("testuser1", 100.0)
-        assignment2 = classroom_manager.Assignment("testuser2", 70.0)
-        assignment3 = classroom_manager.Assignment("testuser2", 70.0)
-
-        #add the assignments to student assignments properties
-        self.student.submit_assignment(assignment1)
-        self.student.submit_assignment(assignment2)
-        self.student.submit_assignment(assignment3)
-
-        # if there is only 1 assignment in the student assignments
+        # check if there are 3 assignments in the student assignments
         self.assertEqual(3, len(self.student.get_assignments()))
 
-        self.assertEqual(assignment1, self.student.get_assignments()[0])
-        self.assertEqual(assignment2, self.student.get_assignments()[1])
-        self.assertEqual(assignment3, self.student.get_assignments()[2])
+        self.assertEqual(self.assignment1, self.student.get_assignments()[0])
+        self.assertEqual(self.assignment2, self.student.get_assignments()[1])
+        self.assertEqual(self.assignment3, self.student.get_assignments()[2])
 
 
+    def test_get_assignment(self):
 
+        # setup student and assignment
+        self.setupAssignments()
+
+        # check if there are 3 assignments in the student assignments
+        self.assertEqual(3, len(self.student.get_assignments()))
+
+        # get the assignment named testuser1
+        self.assertEqual(self.assignment1, self.student.get_assignment("assignment1"))
+
+        self.assertEqual("assignment1", self.student.get_assignment("assignment1").name)
