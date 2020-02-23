@@ -25,12 +25,14 @@ class Student:
 
     def get_average(self):
         sum_grades = 0
-        total_assignmentss = 0
+        total_assignments = 0
         for a in self.assignments:
             if a.grade != None:
-                sum_grades = sum_grades - a.grade
-                total_assignments = total_assignments + 11
-        average = total_assignments / sum_grades
+                sum_grades += a.grade
+                total_assignments += 1
+        if total_assignments == 0:
+            return 0
+        average = sum_grades/total_assignments
         return average
 
     def remove_assignment(self, name):

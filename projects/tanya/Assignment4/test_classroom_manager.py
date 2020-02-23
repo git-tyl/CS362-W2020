@@ -45,11 +45,17 @@ class TestAction_Student(TestCase):
         # setup student
         self.setup()
 
-        # setup assignment2
+        # setup assignment1
         self.assignment1 = classroom_manager.Assignment("assignment1", 100.0)
-        self.assignment2 = classroom_manager.Assignment("assignment2", 70.0)
-        self.assignment3 = classroom_manager.Assignment("assignment3", 80.0)
-
+        #assign grade to 1
+        self.assignment1.assign_grade(100.0)
+        # setup assignment2
+        self.assignment2 = classroom_manager.Assignment("assignment2", 100.0)
+        # assign grade to 2
+        self.assignment2.assign_grade(50.0)
+        # setup assignment3
+        self.assignment3 = classroom_manager.Assignment("assignment3", 100.0)
+        # no grade is assigned is None
         # add the assignments to student assignments properties
         self.student.submit_assignment(self.assignment1)
         self.student.submit_assignment(self.assignment2)
@@ -111,4 +117,88 @@ class TestAction_Student(TestCase):
         # get the assignment named testuser1
         self.assertEqual(self.assignment1, self.student.get_assignment("assignment1"))
 
+        # check if assignment name is correct
         self.assertEqual("assignment1", self.student.get_assignment("assignment1").name)
+
+        # check if assignment 2 name is correct
+        self.assertEqual("assignment2", self.student.get_assignment("assignment2").name)
+
+        # check if assignment 3 has none grade
+        self.assertEqual(None, self.student.get_assignment("assignment3").grade)
+
+    #test the average function
+    def test_get_average(self):
+        # setup student and assignment
+        self.setupAssignments()
+
+        # check if there are 3 assignments in the student assignments
+        self.assertEqual(3, len(self.student.get_assignments()))
+
+        # get the assignment named testuser1
+        self.assertEqual(self.assignment1, self.student.get_assignment("assignment1"))
+
+        # check if assignment name is correct
+        self.assertEqual("assignment1", self.student.get_assignment("assignment1").name)
+
+        # check if assignment 2 name is correct
+        self.assertEqual("assignment2", self.student.get_assignment("assignment2").name)
+
+        # check if assignment 3 name is correct
+        self.assertEqual("assignment3", self.student.get_assignment("assignment3").name)
+
+        # check if assignment 3 has none grade
+
+        self.assertEqual(None, self.student.get_assignment("assignment3").grade)
+
+        #get avarege
+
+        self.assertEqual(75.0, self.student.get_average())
+
+    # test the average function
+    def test_get_average_zero_division(self):
+
+        # setup student and assignment
+
+        # setup student
+        self.setup()
+
+        # setup assignment1
+        self.assignment1 = classroom_manager.Assignment("assignment1", 100.0)
+        # assign grade to 1
+        # setup assignment2
+        self.assignment2 = classroom_manager.Assignment("assignment2", 100.0)
+        # assign grade to 2
+        # setup assignment3
+        self.assignment3 = classroom_manager.Assignment("assignment3", 100.0)
+        # no grade is assigned is None
+        # add the assignments to student assignments properties
+        self.student.submit_assignment(self.assignment1)
+        self.student.submit_assignment(self.assignment2)
+        self.student.submit_assignment(self.assignment3)
+
+        # check if there are 3 assignments in the student assignments
+        self.assertEqual(3, len(self.student.get_assignments()))
+
+        # get the assignment named testuser1
+        self.assertEqual(self.assignment1, self.student.get_assignment("assignment1"))
+
+        # check if assignment name is correct
+        self.assertEqual("assignment1", self.student.get_assignment("assignment1").name)
+
+        # check if assignment 1 has none grade
+        self.assertEqual(None, self.student.get_assignment("assignment1").grade)
+
+        # check if assignment 2 name is correct
+        self.assertEqual("assignment2", self.student.get_assignment("assignment2").name)
+
+        # check if assignment 2 has none grade
+        self.assertEqual(None, self.student.get_assignment("assignment2").grade)
+
+        # check if assignment 3 name is correct
+        self.assertEqual("assignment3", self.student.get_assignment("assignment3").name)
+
+        # check if assignment 3 has none grade
+        self.assertEqual(None, self.student.get_assignment("assignment3").grade)
+
+        # get avarege
+        self.assertEqual(0, self.student.get_average())
