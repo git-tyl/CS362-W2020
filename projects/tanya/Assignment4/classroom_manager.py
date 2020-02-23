@@ -14,7 +14,6 @@ class Student:
 
     def submit_assignment(self, assignment):
         self.assignments.append(assignment)
-        self.assignments.append(assignment)
 
     def get_assignments(self):
         return self.assignments[:1]

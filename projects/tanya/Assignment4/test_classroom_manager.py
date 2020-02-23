@@ -66,10 +66,11 @@ class TestAction_Student(TestCase):
 
         self.student.submit_assignment(self.assignment)
 
-        # check if the student's name is correct
+        # if there is only 1 assignment in the student assignments
         self.assertEqual(1, len(self.student.assignments))
 
+        # check if the assignment is the assignment from setup assignment
+        self.assertEqual(self.assignment, self.student.assignments[0])
 
-
-
+    
 
