@@ -16,7 +16,7 @@ class Student:
         self.assignments.append(assignment)
 
     def get_assignments(self):
-        return self.assignments[:1]
+        return self.assignments
 
     def get_assignment(self, name):
         for a in self.assignments:

@@ -4,6 +4,7 @@ import classroom_manager
 
 class TestAssignment(TestCase):
 
+    #setup assignment variable
     def setup(self):
         self.assignment = classroom_manager.Assignment("testuser", 100.0)
 
@@ -24,7 +25,6 @@ class TestAssignment(TestCase):
         self.assertEqual(100.0, self.assignment.grade)
 
     # test if a grade is assigned over the max you will get none
-
     def test_assignGradeMax(self):
         self.setup()
 
@@ -72,5 +72,27 @@ class TestAction_Student(TestCase):
         # check if the assignment is the assignment from setup assignment
         self.assertEqual(self.assignment, self.student.assignments[0])
 
-    
+    def test_get_assignment(self):
+
+        # setup student
+        self.setup()
+
+        # setup assignment2
+        assignment1 = classroom_manager.Assignment("testuser1", 100.0)
+        assignment2 = classroom_manager.Assignment("testuser2", 70.0)
+        assignment3 = classroom_manager.Assignment("testuser2", 70.0)
+
+        #add the assignments to student assignments properties
+        self.student.submit_assignment(assignment1)
+        self.student.submit_assignment(assignment2)
+        self.student.submit_assignment(assignment3)
+
+        # if there is only 1 assignment in the student assignments
+        self.assertEqual(3, len(self.student.get_assignments()))
+
+        self.assertEqual(assignment1, self.student.get_assignments()[0])
+        self.assertEqual(assignment2, self.student.get_assignments()[1])
+        self.assertEqual(assignment3, self.student.get_assignments()[2])
+
+
 
