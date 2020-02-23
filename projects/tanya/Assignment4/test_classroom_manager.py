@@ -2,30 +2,36 @@ from unittest import TestCase
 
 import classroom_manager
 
+
+#The Class Test all assignment test cases
 class TestAssignment(TestCase):
 
     #setup assignment variable
     def setup(self):
-        self.assignment = classroom_manager.Assignment("testuser", 100.0)
+        self.assignment = classroom_manager.Assignment("assignment1", 100.0)
 
 
     # test initiator for assignment
     def test_init(self):
         self.setup()
         self.assertEqual(100.0, self.assignment.max_score)
-        self.assertEqual("testuser", self.assignment.name)
+        self.assertEqual("assignment1", self.assignment.name)
         self.assertEqual(None, self.assignment.grade)
 
     #test if a grade can be assigned
     def test_assignGrade(self):
         self.setup()
 
-        #test if a grade can be assigned
+        # test if a grade can be assigned
+        self.assignment.assign_grade(50.0)
+        self.assertEqual(50.0, self.assignment.grade)
+
+        #test if a grade can be assigned if its the same as the max score
         self.assignment.assign_grade(100.0)
         self.assertEqual(100.0, self.assignment.grade)
 
     # test if a grade is assigned over the max you will get none
-    def test_assignGradeMax(self):
+    def test_assign_grade_max(self):
         self.setup()
 
         #test if a grade can be assigned
@@ -38,7 +44,7 @@ class TestAction_Student(TestCase):
         self.student = classroom_manager.Student(1, "John", "Smith")
 
     def setupAssignment(self):
-        self.assignment = classroom_manager.Assignment("testuser", 100.0)
+        self.assignment = classroom_manager.Assignment("assignment1", 100.0)
 
     #setup a list of assignment
     def setupAssignments(self):
@@ -93,7 +99,13 @@ class TestAction_Student(TestCase):
         # check if the assignment is the assignment from setup assignment
         self.assertEqual(self.assignment, self.student.assignments[0])
 
-    def test_get_assignment(self):
+        # check if the assignment's name is assignment1
+        self.assertEqual("assignment1", self.student.assignments[0].name)
+
+        # check if the assignment's max_grade is
+        self.assertEqual(100.0, self.student.assignments[0].max_score)
+
+    def test_get_assignments(self):
 
         #setup student and assignment
         self.setupAssignments()
@@ -101,10 +113,26 @@ class TestAction_Student(TestCase):
         # check if there are 3 assignments in the student assignments
         self.assertEqual(3, len(self.student.get_assignments()))
 
+        #get information for assignment1
         self.assertEqual(self.assignment1, self.student.get_assignments()[0])
+
+        self.assertEqual("assignment1", self.student.get_assignments()[0].name)
+
+        self.assertEqual(100.0, self.student.get_assignments()[0].max_score)
+
+        # get information for assignment2
         self.assertEqual(self.assignment2, self.student.get_assignments()[1])
+
+        self.assertEqual("assignment2", self.student.get_assignments()[1].name)
+
+        self.assertEqual(100.0, self.student.get_assignments()[1].max_score)
+
+        # get information for assignment3
         self.assertEqual(self.assignment3, self.student.get_assignments()[2])
 
+        self.assertEqual("assignment3", self.student.get_assignments()[2].name)
+
+        self.assertEqual(100.0, self.student.get_assignments()[2].max_score)
 
     def test_get_assignment(self):
 
@@ -233,4 +261,5 @@ class TestAction_Student(TestCase):
 
         for assignment in self.student.get_assignments():
             self.assertNotEqual("assignment1", assignment.name)
+            self.assertNotEqual(self.assignment1, assignment)
 
